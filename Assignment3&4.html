@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Race Simulation</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .car-info {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div id="race-results">
+  <!-- Car info will be displayed here after each turn -->
+</div>
+
+<script>
+  class Car {
+    constructor(brand, model, year, color, price, gas) {
+      this.brand = brand;
+      this.model = model;
+      this.year = year;
+      this.color = color;
+      this.price = price;
+      this.gas = gas;
+    }
+
+    honk() {
+      console.log("Tuut tuut");
+      console.log(`Brand: ${this.brand}, Model: ${this.model}, Year: ${this.year}, Color: ${this.color}, Price: ${this.price}`);
+    }
+
+    loseGas() {
+      let yearsOld = new Date().getFullYear() - this.year;
+      let gasLoss = yearsOld > 0 ? 5 + yearsOld : 5; // New cars lose 5 liters, additional liters for older cars
+      this.gas -= gasLoss;
+    }
+  }
+
+  const cars = [
+    new Car('Honda', 'CR-V', 2023, 'Red', 50000, 45),
+    new Car('Ford', 'F-150', 2020, 'Black', 25000, 30),
+    new Car('BMW', 'X5', 2022, 'Green', 60000, 65),
+    new Car('Mazda', 'CX-5', 2019, 'White', 15000, 60),
+    new Car('Audi', 'Q7', 2018, 'Silver', 52000, 47),
+    new Car('Kia', 'Forte', 2020, 'Blue', 21000, 56)
+  ];
+
+  function raceSimulation() {
+    const raceResults = document.getElementById('race-results');
+    let turn = 1;
+    cars.forEach(car => {
+      const carInfo = document.createElement('div');
+      carInfo.classList.add('car-info');
+      carInfo.innerHTML = `<h3>Turn ${turn}</h3>`;
+      carInfo.innerHTML += `<p>Car: ${car.brand} ${car.model}</p>`;
+      carInfo.innerHTML += `<p>Gas remaining: ${car.gas} liters</p>`;
+      raceResults.appendChild(carInfo);
+      turn++;
+    });
+
+    // Simulate race for 7 turns
+    for (let i = 0; i < 7; i++) {
+      cars.forEach(car => {
+        car.loseGas();
+      });
+
+      cars.forEach((car, index) => {
+        const carInfo = document.querySelectorAll('.car-info')[index];
+        carInfo.innerHTML += `<p>Gas remaining after turn ${i + 1}: ${car.gas} liters</p>`;
+      });
+    }
+  }
+
+  // Start the race simulation
+  raceSimulation();
+</script>
+
+</body>
+</html>
